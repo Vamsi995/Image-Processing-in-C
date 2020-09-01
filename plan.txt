@@ -1,0 +1,13 @@
+
+Problem 1
+
+1. Create Folder structure
+2. How are going to take input?
+3. Creating the libraries
+4. Transformations implementation
+5. Optimization
+
+
+
+
+Problem 2
