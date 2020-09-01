@@ -27,7 +27,7 @@
 # Shared objects (inc. Windows DLLs)
 *.dll
 *.so
-#*.so.*
+*.so.*
 *.dylib
 
 # Executables
@@ -39,15 +39,15 @@
 *.hex
 
 # Debug files
-#*.dSYM/
+*.dSYM/
 *.su
 *.idb
 *.pdb
 
 # Kernel Module Compile Results
-#*.mod*
-#*.cmd
-#.tmp_versions/
+*.mod*
+*.cmd
+.tmp_versions/
 modules.order
 Module.symvers
 Mkfile.old
