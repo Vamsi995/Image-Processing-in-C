@@ -147,8 +147,10 @@ int main(int argc, char *argv[])
     
     fclose(file);
     
+    IMAGE * grayed = RGBtoGray(image);
+    IMAGE * mirrored = mirror(grayed);
 
-    write(width,height,image);
+    write(width,height,mirrored);
     
 
 }
