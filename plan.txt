@@ -1,12 +1,13 @@
+Tasks:
 
-Problem 1
+    1. Converting jpg, jpeg to ppm.
+        5 PM.
 
-1. Create Folder structure
-2. How are going to take input?
-3. Creating the libraries
-4. Transformations implementation
-5. Optimization
-
+    2. Taking ppm as input and storing it in a matrix struct.
+        5 PM.
 
 
-Problem 2
+    3. Transformations
+    4. Output the image to a file.
+    5. Configure the Makefile
+    6. Documentation.
