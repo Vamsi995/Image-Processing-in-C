@@ -12,24 +12,55 @@ typedef struct header
 
 } PPMHEADER;
 
-
 typedef struct rgb
 {
-    
-    int red;
-    int green;
-    int blue;
+
+    unsigned short red;
+    unsigned short green;
+    unsigned short blue;
 
 } PIXEL;
 
-
-
 typedef struct matrix
 {
-
+    int height;
+    int width;
+    int maxColor;
     PIXEL **image;
 
-} MATRIX;
+} IMAGE;
+
+
+typedef IMAGE *MATRIX;
+
+
+
+void write(int width, int height, MATRIX image) {
+    FILE *fp = fopen("level.ppm","wb");
+
+    int error = 1;
+    if (fp != NULL)
+    {
+        fprintf(fp, "P3\n");
+        fprintf(fp, "%d %d\n", width, height);
+        fprintf(fp, "%d\n", 255); 
+        
+        for (int v = 0; v < height; v++)
+        {
+            for (int h = 0; h < width; h++)
+            {
+                fprintf(fp,"%hu %hu %hu ", image->image[v][h].red,image->image[v][h].green, image->image[v][h].blue);
+            }
+            fprintf(fp, "\n");
+        }
+
+        if (fwrite("\n",sizeof(char),1,fp) == 1)
+            error = 0;
+        fclose(fp);
+    }
+
+    return;
+}
 
 
 
@@ -37,41 +68,87 @@ typedef struct matrix
 int main(int argc, char *argv[])
 {
 
-    // PPMHEADER *space = (PPMHEADER *)malloc(sizeof(PPMHEADER));
-
     char space[100];
 
-    char *filename = argv[1];
+    FILE *file = fopen(argv[1], "r");
 
-    FILE *file = fopen(filename, "rb");
+    int height;
+    int width;
+    int maxColor;
+    char *fileFormat = NULL;
 
-    // for(int i=0;i<14;i++){
+    if(fgets(space, 4, file) != NULL){
+        fileFormat = space;
+        fileFormat[strlen(space) - 1] = '\0';
+    }
 
-    int i = 0;
 
-    char *fileFormat = fgets(space, 3, file);
+    // Raw Version
 
-    if (strcmp(fileFormat, "P6") == 0)
+    if (strcmp(fileFormat, "P3") == 0)
     {
 
-        // while (fgets(space, 100, file))
-        // {
+        int flag = 0;
 
-        //     if (i == 1)
-        //     {
-        //         break;
-        //     }
+        while (fgets(space, 100, file) != NULL)
+        {
+            if (space[0] == '#')
+            {
+                continue;
+            }
+            if (flag == 1)
+            {
+                sscanf(space, "%d", &maxColor);
+                break;
+            }
 
-        //     printf("%s", space);
-        //     i++;
-        // }
+            sscanf(space, "%d %d %d", &width, &height, &maxColor);
 
-        // printf("%s", space);
-        printf("Yes");
+            if (maxColor == 0)
+            {
+                flag = 1;
+                continue;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        printf("%d %d %d\n", width, height, maxColor);
     }
 
     else
     {
         printf("Error: Not a ppm format file");
     }
+
+
+
+    IMAGE *image = (IMAGE *)malloc(sizeof(IMAGE));
+
+    image->height = height;
+    image->width = width;
+    image->maxColor = maxColor; 
+    image->image = (PIXEL **)malloc(height * sizeof(PIXEL)); 
+
+    unsigned short red; unsigned short green; unsigned short blue;
+
+    for(int i=0;i<height;i++) {
+            image->image[i] = (PIXEL *)malloc(width * sizeof(PIXEL)); 
+        for(int j=0;j<width;j++) // Important bug fix here!
+        {
+            fscanf(file,"%hu %hu %hu",&red, &green, &blue);
+            image->image[i][j].red = red;
+            image->image[i][j].green = green;
+            image->image[i][j].blue = blue;
+        }
+    } 
+    
+    fclose(file);
+    
+
+    write(width,height,image);
+    
+
 }
