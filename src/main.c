@@ -1,16 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-typedef struct header
-{
-
-    char formatType[2];
-    int rows;
-    int columns;
-    int maxColorValue;
-
-} PPMHEADER;
+// #include "matrix.h"
 
 typedef struct rgb
 {
@@ -26,22 +17,93 @@ typedef struct matrix
     int height;
     int width;
     int maxColor;
-    PIXEL **image;
+    PIXEL **data;
 
 } IMAGE;
 
-typedef IMAGE *MATRIX;
+typedef IMAGE **MATRIX;
+
 
 
 int sub(MATRIX P, MATRIX A, MATRIX B);
-int dotproduct(MATRIX P, MATRIX A, MATRIX B);
+int matrixmul(MATRIX P, MATRIX A, MATRIX B);
 int addition(MATRIX P, MATRIX A, MATRIX B);
+int flatten(MATRIX P);
 
 
 
 
-void write(int width, int height, MATRIX image)
+
+
+
+
+MATRIX createImage(int height, int width, int maxColor){
+	
+    IMAGE *test = (IMAGE *)malloc(sizeof(IMAGE));
+    MATRIX q = &test;
+
+    test->height = height;
+    test->width = width;
+    test->maxColor = maxColor; 
+    test->data = (PIXEL **)malloc(height * sizeof(PIXEL *));
+    int i; 
+    for(i=0; i<width; i = i+1){
+    	test->data[i] = (PIXEL *)malloc(width * sizeof(PIXEL));
+    }
+
+    return q;
+    
+}
+
+
+MATRIX RGBtoGray(MATRIX Pimage){
+
+    IMAGE *image = *(Pimage);
+	int h = image->height;
+	int w = image->width;
+    int m = image->maxColor;
+	// // MATRIX temp = createImage(h,w,image->maxColor);
+	// MATRIX temp = createImage(h,w,image->maxColor);
+    // IMAGE *oneByThree = *(temp);
+
+    unsigned short result;
+	// printf("%p\n",image);
+    int s = flatten(&image);
+
+    MATRIX temp = createImage(h,w,m);
+    IMAGE *oneByThree = *(temp);
+
+
+	for(int i=0 ; i<h ; i = i+1){
+		for(int j=0; j<w ; j = j+1){
+			// if(i == j){
+				oneByThree->data[i][j].red = 1/3;
+				oneByThree->data[i][j].green = 1/3;
+				oneByThree->data[i][j].blue = 1/3;
+			// }
+			// else{
+				// oneByThree->data[i][j].red = 0;
+				// oneByThree->data[i][j].green = 0;
+				// oneByThree->data[i][j].blue = 0;
+			// }
+		}
+	}
+
+	int success = matrixmul(&image, &image, &oneByThree); //expecting this function to already exist
+
+    if(success == 0)
+    {
+	    return Pimage;
+    }
+
+}
+
+
+
+void write(int width, int height, MATRIX Pimage)
 {
+
+    IMAGE *image = *(Pimage);
     FILE *fp = fopen("level.ppm", "wb");
 
     int error = 1;
@@ -55,7 +117,7 @@ void write(int width, int height, MATRIX image)
         {
             for (int h = 0; h < width; h++)
             {
-                fprintf(fp, "%hu %hu %hu ", image->image[v][h].red, image->image[v][h].green, image->image[v][h].blue);
+                fprintf(fp, "%hu %hu %hu ", image->data[v][h].red, image->data[v][h].green, image->data[v][h].blue);
             }
             fprintf(fp, "\n");
         }
@@ -107,7 +169,7 @@ int main(int argc, char *argv[])
 
             sscanf(space, "%d %d %d", &width, &height, &maxColor);
 
-            if (maxColor == 0)
+            if (maxColor == 0 || abs(maxColor) > 63575)
             {
                 flag = 1;
                 continue;
@@ -131,7 +193,7 @@ int main(int argc, char *argv[])
     image->height = height;
     image->width = width;
     image->maxColor = maxColor;
-    image->image = (PIXEL **)malloc(height * sizeof(PIXEL));
+    image->data = (PIXEL **)malloc(height * sizeof(PIXEL *));
 
     unsigned short red;
     unsigned short green;
@@ -139,30 +201,91 @@ int main(int argc, char *argv[])
 
     for (int i = 0; i < height; i++)
     {
-        image->image[i] = (PIXEL *)malloc(width * sizeof(PIXEL));
+        image->data[i] = (PIXEL *)malloc(width * sizeof(PIXEL));
         for (int j = 0; j < width; j++) // Important bug fix here!
         {
             fscanf(file, "%hu %hu %hu", &red, &green, &blue);
-            image->image[i][j].red = red;
-            image->image[i][j].green = green;
-            image->image[i][j].blue = blue;
+            image->data[i][j].red = red;
+            image->data[i][j].green = green;
+            image->data[i][j].blue = blue;
         }
     }
 
     fclose(file);
-    
-    IMAGE * grayed = RGBtoGray(image);
-    IMAGE * mirrored = mirror(grayed);
 
-    write(width,height,mirrored);
-    
+    // printf("%p\n", image);
+    // write(width,height,&temp);    
+    MATRIX grayed = RGBtoGray(&image);
+    // MATRIX mirrored = mirror(grayed);
+
+    // unsigned short result;
+
+    //  for (int i = 0; i < height; i++)
+    // {
+
+    //     for (int j = 0; j < width; j++)
+    //     {
+
+
+    //         result = image->data[i][j].red + image->data[i][j].green + image->data[i][j].blue; 
+            
+    //         image->data[i][j].red = result;
+    //         image->data[i][j].green = result;
+    //         image->data[i][j].blue = result;
+    //     }
+    // }
+
+    write(width,height,grayed);
+
+
+}
+
+
+int flatten(MATRIX p)
+{
+
+    IMAGE *P = *(p);
+
+    printf("%p\n",P);
+
+    unsigned short r;
+    int m = P->maxColor;
+
+    // printf("%d\n",P->height);
+
+    for (int i = 0; i < P->height; i++)
+    {
+
+        for (int j = 0; j < P->width; j++)
+        {
+
+
+            r = P->data[i][j].red + P->data[i][j].green + P->data[i][j].blue; 
+            
+            r = (r>m)?m:r;
+
+            P->data[i][j].red = r;
+            P->data[i][j].green = r;
+            P->data[i][j].blue = r;
+        }
+    }
+
+
+    return 0;
+
+
 
 }
 
 
 
-int dotproduct(MATRIX P, MATRIX A, MATRIX B)
+int matrixmul(MATRIX p, MATRIX x, MATRIX y)
 {
+
+    IMAGE *P = *(p);
+    IMAGE *A = *(x);
+    IMAGE *B = *(y);
+
      if(A->height != B->height || A->width != B->width)
     {
         return 1;
@@ -183,18 +306,18 @@ int dotproduct(MATRIX P, MATRIX A, MATRIX B)
         {
 
 
-               r = A->image[i][j].red * B->image[i][j].red; 
-             g = A->image[i][j].green * B->image[i][j].green;
-            b = A->image[i][j].blue * B->image[i][j].blue;
+               r = A->data[i][j].red * B->data[i][j].red; 
+             g = A->data[i][j].green * B->data[i][j].green;
+            b = A->data[i][j].blue * B->data[i][j].blue;
 
                 r = (r>m)?m:r;
                 g = (g>m)?m:g;
                 b = (b>m)?m:b;
 
 
-            P->image[i][j].red = r;
-            P->image[i][j].green = g;
-            P->image[i][j].blue = b;
+            P->data[i][j].red = r;
+            P->data[i][j].green = g;
+            P->data[i][j].blue = b;
         }
     }
 
@@ -204,8 +327,17 @@ int dotproduct(MATRIX P, MATRIX A, MATRIX B)
 
 
 
-int sub(MATRIX P, MATRIX A, MATRIX B)
+int sub(MATRIX p, MATRIX x, MATRIX y)
 {
+
+
+    IMAGE *P = *(p);
+    IMAGE *A = *(x);
+    IMAGE *B = *(y);
+
+
+
+
      if(A->height != B->height || A->width != B->width)
     {
         return 1;
@@ -226,25 +358,24 @@ int sub(MATRIX P, MATRIX A, MATRIX B)
         {
 
 
-               r = A->image[i][j].red - B->image[i][j].red; 
-             g = A->image[i][j].green - B->image[i][j].green;
-            b = A->image[i][j].blue - B->image[i][j].blue;
+               r = A->data[i][j].red - B->data[i][j].red; 
+             g = A->data[i][j].green - B->data[i][j].green;
+            b = A->data[i][j].blue - B->data[i][j].blue;
 
                 r = (r>m)?m:r;
                 g = (g>m)?m:g;
                 b = (b>m)?m:b;
 
 
-            P->image[i][j].red = r;
-            P->image[i][j].green = g;
-            P->image[i][j].blue = b;
+            P->data[i][j].red = r;
+            P->data[i][j].green = g;
+            P->data[i][j].blue = b;
         }
     }
 
     return 0;
 
 }
-
 
 
 
