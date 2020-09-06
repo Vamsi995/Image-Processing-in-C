@@ -1,38 +1,36 @@
 #include "matrix.h"
 #include <stdio.h>
 
-int flatten(MATRIX P, MATRIX A)
+
+int flatten(MATRIX p)
 {
 
+    IMAGE *P = *(p);
 
+    printf("%p\n",P);
 
     unsigned short r;
     int m = P->maxColor;
 
-    printf("%d",P->width);
-    printf("%d",P->height);
+    // printf("%d\n",P->height);
 
-    for (int i = 0; i < 540; i++)
+    for (int i = 0; i < P->height; i++)
     {
 
-        for (int j = 0; j < 720; j++)
+        for (int j = 0; j < P->width; j++)
         {
 
 
-            r = A->image[i][j].red + A->image[i][j].green + A->image[i][j].blue; 
+            r = P->data[i][j].red + P->data[i][j].green + P->data[i][j].blue; 
             
             r = (r>m)?m:r;
-            //  r = 1;
-            // printf("%hu %hu %hu\n",P->image[i][j].red, P->image[i][j].green, P->image[i][j].blue);
-            P->image[i][j].red = r;
-            P->image[i][j].green = r;
-            P->image[i][j].blue = r;
+
+            P->data[i][j].red = r/3;
+            P->data[i][j].green = r/3;
+            P->data[i][j].blue = r/3;
         }
     }
 
-    // P->image[0][0].red = 1;
-    // P->image[0][0].green = 1;
-    // P->image[0][0].blue = 1;
 
     return 0;
 
@@ -42,8 +40,13 @@ int flatten(MATRIX P, MATRIX A)
 
 
 
-int matrixmul(MATRIX P, MATRIX A, MATRIX B)
+int matrixmul(MATRIX p, MATRIX x, MATRIX y)
 {
+
+    IMAGE *P = *(p);
+    IMAGE *A = *(x);
+    IMAGE *B = *(y);
+
      if(A->height != B->height || A->width != B->width)
     {
         return 1;
@@ -64,18 +67,18 @@ int matrixmul(MATRIX P, MATRIX A, MATRIX B)
         {
 
 
-               r = A->image[i][j].red * B->image[i][j].red; 
-             g = A->image[i][j].green * B->image[i][j].green;
-            b = A->image[i][j].blue * B->image[i][j].blue;
+               r = A->data[i][j].red * B->data[i][j].red; 
+             g = A->data[i][j].green * B->data[i][j].green;
+            b = A->data[i][j].blue * B->data[i][j].blue;
 
                 r = (r>m)?m:r;
                 g = (g>m)?m:g;
                 b = (b>m)?m:b;
 
 
-            P->image[i][j].red = r;
-            P->image[i][j].green = g;
-            P->image[i][j].blue = b;
+            P->data[i][j].red = r;
+            P->data[i][j].green = g;
+            P->data[i][j].blue = b;
         }
     }
 
@@ -85,8 +88,17 @@ int matrixmul(MATRIX P, MATRIX A, MATRIX B)
 
 
 
-int sub(MATRIX P, MATRIX A, MATRIX B)
+int sub(MATRIX p, MATRIX x, MATRIX y)
 {
+
+
+    IMAGE *P = *(p);
+    IMAGE *A = *(x);
+    IMAGE *B = *(y);
+
+
+
+
      if(A->height != B->height || A->width != B->width)
     {
         return 1;
@@ -107,18 +119,18 @@ int sub(MATRIX P, MATRIX A, MATRIX B)
         {
 
 
-               r = A->image[i][j].red - B->image[i][j].red; 
-             g = A->image[i][j].green - B->image[i][j].green;
-            b = A->image[i][j].blue - B->image[i][j].blue;
+               r = A->data[i][j].red - B->data[i][j].red; 
+             g = A->data[i][j].green - B->data[i][j].green;
+            b = A->data[i][j].blue - B->data[i][j].blue;
 
                 r = (r>m)?m:r;
                 g = (g>m)?m:g;
                 b = (b>m)?m:b;
 
 
-            P->image[i][j].red = r;
-            P->image[i][j].green = g;
-            P->image[i][j].blue = b;
+            P->data[i][j].red = r;
+            P->data[i][j].green = g;
+            P->data[i][j].blue = b;
         }
     }
 
@@ -127,4 +139,39 @@ int sub(MATRIX P, MATRIX A, MATRIX B)
 }
 
 
+
+int matrixMul(MATRIX p, MATRIX x, MATRIX y) {
+
+    IMAGE *P = *(p);
+    IMAGE *A = *(x);
+    IMAGE *B = *(y);
+
+
+    // if(A->height != B->height || A->width != B->width)
+    // {
+    //     return 1;
+    // }
+
+
+    P->height = A->height;
+    P->width = B->width;
+    P->maxColor = B->maxColor;
+
+    printf("%d %d - %d %d\n",A->height,A->width, B->height,B->width);
+
+
+    for (int i = 0; i < A->height; ++i) {
+      for (int j = 0; j < B->width; ++j) {
+         for (int k = 0; k < A->width; ++k) {
+            P->data[i][j].red += A->data[i][k].red * B->data[k][j].red;
+            P->data[i][j].green += A->data[i][k].green * B->data[k][j].green;
+            P->data[i][j].blue += A->data[i][k].blue * B->data[k][j].blue;
+         }
+      }
+   }
+
+
+    return 0;
+
+}
 
