@@ -25,7 +25,10 @@ IMAGE* RGBtoGray(IMAGE* image){
 
 	for(i=0; i< h ; i=i+1){
 		for(j=0; j < w; j=j+1){
-			temp[i][j]->red=image->image[i][j].red + image->image[i][j].green + image->image[i][j].blue; 
+			temp[i][j].red = image->image[i][j].red + image->image[i][j].green + image->image[i][j].blue; 
+			temp[i][j].green = image->image[i][j].red + image->image[i][j].green + image->image[i][j].blue; 
+			temp[i][j].blue = image->image[i][j].red + image->image[i][j].green + image->image[i][j].blue; 
+			
 		}
 	}
 	
@@ -33,9 +36,13 @@ IMAGE* RGBtoGray(IMAGE* image){
 		for(j=0; j<w ; j = j+1){
 			if(i == j){
 				oneByThree[i][j].red = 1/3;
+				oneByThree[i][j].green = 1/3;
+				oneByThree[i][j].blue = 1/3;
 			}
 			else{
 				oneByThree[i][j].red = 0;
+				oneByThree[i][j].green = 0;
+				oneByThree[i][j].blue = 0;
 			}
 		}
 	}

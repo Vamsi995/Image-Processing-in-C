@@ -25,9 +25,14 @@ IMAGE * mirror(IMAGE * image){
 		for(j=0; j<w ; j = j+1){
 			if( (i*w) + (j*h) == w*h ){
 				temp.red = 1;
+				temp.green = 1;
+				temp.blue = 1;
 			}
 			else{
 				temp.red = 0;
+				temp.green = 0;
+				temp.blue = 0;
+			
 			}
 		}
 	}
