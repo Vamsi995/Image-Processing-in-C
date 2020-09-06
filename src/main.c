@@ -150,49 +150,12 @@ int main(int argc, char *argv[])
     }
 
     fclose(file);
+    
+    IMAGE * grayed = RGBtoGray(image);
+    IMAGE * mirrored = mirror(grayed);
 
-    write(width, height, image);
-}
-
-int addition(MATRIX P, MATRIX A, MATRIX B)
-{
-    //Elementwise multiplication
-    if(A->height != B->height || A->width != B->width)
-    {
-        return 1;
-    }
-
-
-    P->height = A->height;
-    P->width = A->width;
-    P->maxColor = A->maxColor;
-
-    unsigned short r,g,b;
-    int m = A->maxColor;
-
-    for (int i = 0; i < A->height; i++)
-    {
-
-        for (int j = 0; j < A->width; j++)
-        {
-
-
-               r = A->image[i][j].red + B->image[i][j].red; 
-             g = A->image[i][j].green + B->image[i][j].green;
-            b = A->image[i][j].blue + B->image[i][j].blue;
-
-                r = (r>m)?m:r;
-                g = (g>m)?m:g;
-                b = (b>m)?m:b;
-
-
-            P->image[i][j].red = r;
-            P->image[i][j].green = g;
-            P->image[i][j].blue = b;
-        }
-    }
-
-    return 0;
+    write(width,height,mirrored);
+    
 
 }
 
