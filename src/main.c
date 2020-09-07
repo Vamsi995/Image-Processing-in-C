@@ -47,18 +47,13 @@ int main(int argc, char *argv[])
         // MATRIX q = createImage(height,width,maxColor);
         // IMAGE *temp2 = *(q);
          
-        IMAGE *temp2 = (IMAGE *)malloc(sizeof(IMAGE));
-         create(height,width,maxColor,temp2);
+        // IMAGE *temp2 = (IMAGE *)malloc(sizeof(IMAGE));
+        //  create(height,width,maxColor,temp2);
         
 
-        MATRIX mirrored = mirror(&image,&temp2);
+        MATRIX mirrored = edgeDetection(&image);
         write(width,height,mirrored,argv[2]);
 
-        // for(int i=0;i<10;i++)
-        // {
-        //     if(temp2->data[i] != NULL)
-        //         free(temp2->data[i]);
-        // }
 
     }
     else if(strcmp(argv[3],"run") == 0 || strcmp(argv[3],"test") == 0)
@@ -67,13 +62,13 @@ int main(int argc, char *argv[])
         // MATRIX q1 = createImage(height,width,maxColor);
         // IMAGE *temp1 = *(q1);
 
-        IMAGE *temp2 = (IMAGE *)malloc(sizeof(IMAGE));
-        create(height,width,maxColor,temp2);
+        // IMAGE *temp2 = (IMAGE *)malloc(sizeof(IMAGE));
+        // create(height,width,maxColor,temp2);
         
         
-        MATRIX mirrored = mirror(&image,&temp2);
-        MATRIX grayed = RGBtoGray(mirrored);
-        write(width,height,grayed,argv[2]);
+        MATRIX grayed = RGBtoGray(&image);
+        MATRIX mirrored = edgeDetection(grayed);
+        write(width,height,mirrored,argv[2]);
 
     }
     else
@@ -81,10 +76,5 @@ int main(int argc, char *argv[])
         print_exit("Unrecognized command");
     }
 
-    //  for (int i = 0; i < height-1; i++){
-    //          if(image->data[i] != NULL)  
-    //             free(image->data[i]);  
-    // }     
-    // free(image);
  
 }

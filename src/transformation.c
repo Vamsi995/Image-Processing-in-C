@@ -20,7 +20,7 @@ MATRIX createImage(int height, int width, int maxColor){
     	test->data[i] = (PIXEL *)malloc(width * sizeof(PIXEL));
     }
 
-    return NULL;
+    return q;
 }
 
 MATRIX create(int height, int width, int maxColor, IMAGE *test){
@@ -231,7 +231,7 @@ MATRIX edgeDetection(MATRIX Pimage) {
         
     }
     
-    free(temp);
+    // free(temp);
     return Pimage;
 
 }

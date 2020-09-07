@@ -155,7 +155,6 @@ int matrixMul(MATRIX p, MATRIX x, MATRIX y) {
             P->data[i][j].blue += A->data[i][k].blue * B->data[k][j].blue;
          }  
          
-        //  P->data[i][j].red += A->data[i][k].red * B->data[k][j].red;
       
       }
    }    

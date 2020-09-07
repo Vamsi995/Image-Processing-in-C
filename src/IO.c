@@ -29,7 +29,7 @@ void write(int width, int height, MATRIX Pimage, char *filename)
             for (int h = 0; h < width; h++)
             {
 
-                image->data[v][h].red = ((int)image->data[v][h].red > m) ? m : (int)image->data[v][h].red;
+                // image->data[v][h].red = ((int)image->data[v][h].red > m) ? m : (int)image->data[v][h].red;
                 // image->data[v][h].green = (image->data[v][h].green > m) ? m : image->data[v][h].green;
                 // image->data[v][h].blue = (image->data[v][h].blue > m) ? m : image->data[v][h].blue;
 
