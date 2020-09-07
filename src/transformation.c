@@ -20,23 +20,21 @@ MATRIX createImage(int height, int width, int maxColor){
     	test->data[i] = (PIXEL *)malloc(width * sizeof(PIXEL));
     }
 
-    return q;
+    return NULL;
 }
 
-
-
-void createImag(int height, int width, int maxColor, IMAGE *test){
+MATRIX create(int height, int width, int maxColor, IMAGE *test){
 	
+
     test->height = height;
     test->width = width;
     test->maxColor = maxColor; 
     test->data = (PIXEL **)malloc(height * sizeof(PIXEL *));
-    int i; 
-    for(i=0; i<width; i = i+1){
+    for(int i=0; i<width; i = i+1){
     	test->data[i] = (PIXEL *)malloc(width * sizeof(PIXEL));
     }
 
-  
+    return NULL;
 }
 
 
@@ -44,16 +42,19 @@ void createImag(int height, int width, int maxColor, IMAGE *test){
 
 MATRIX RGBtoGray(MATRIX Pimage){
 
+
     IMAGE *image = *(Pimage);
 	int h = image->height;
 	int w = image->width;
     int m = image->maxColor;
 
-    unsigned short result;
     int s = flatten(&image);
 
-    MATRIX temp = createImage(h,w,m);
-    IMAGE *oneByThree = *(temp);
+    // MATRIX temp = createImage(h,w,m);
+    // IMAGE *oneByThree = *(temp);
+
+    IMAGE *oneByThree = (IMAGE *)malloc(sizeof(IMAGE));
+    create(h,w,m,oneByThree);
 
 	for(int i=0 ; i<h ; i = i+1){
 		for(int j=0; j<w ; j = j+1){
@@ -83,10 +84,11 @@ MATRIX mirror(MATRIX Pimage, MATRIX Presult){
 	int w = image->width;
     int m = image->maxColor;
 
-    int k = h;
 
-    MATRIX q = createImage(h,h,m);
-    IMAGE *temp = *(q);
+    // MATRIX q = createImage(h,h,m);
+    // IMAGE *temp = *(q);
+    IMAGE *temp = (IMAGE *)malloc(sizeof(IMAGE));
+    create(h,h,m,temp);
 
 	for(int i=0 ; i<h ; i = i+1){
 		for(int j=0; j<h ; j = j+1){
@@ -105,11 +107,12 @@ MATRIX mirror(MATRIX Pimage, MATRIX Presult){
 		}
 	}
 
- 
 
 	int success = matrixMul(&result, &temp, &image); //expecting this function to already exist
     
-    free(temp);
+  
+
+    // free(temp);
 
     if(success == 0)
     {

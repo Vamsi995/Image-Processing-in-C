@@ -39,36 +39,41 @@ int main(int argc, char *argv[])
 
         MATRIX grayed = RGBtoGray(&image);
         write(width,height,grayed,argv[2]);
-        // free(*(grayed)); 
 
     }
     else if(strcmp(argv[3],"T2") == 0)
     {
 
-        MATRIX q = createImage(height,width,maxColor);
-        IMAGE *temp2 = *(q);
+        // MATRIX q = createImage(height,width,maxColor);
+        // IMAGE *temp2 = *(q);
+         
+        IMAGE *temp2 = (IMAGE *)malloc(sizeof(IMAGE));
+         create(height,width,maxColor,temp2);
+        
 
         MATRIX mirrored = mirror(&image,&temp2);
         write(width,height,mirrored,argv[2]);
-        // free(temp2);
-    //   for (int i = 0; i < height-1; i++){
-    //          if(temp2->data[i] != NULL)  
-    //             free(temp2->data[i]);  
-    // }     
 
+        // for(int i=0;i<10;i++)
+        // {
+        //     if(temp2->data[i] != NULL)
+        //         free(temp2->data[i]);
+        // }
 
     }
     else if(strcmp(argv[3],"run") == 0 || strcmp(argv[3],"test") == 0)
     {
 
-        MATRIX q1 = createImage(height,width,maxColor);
-        IMAGE *temp1 = *(q1);
-        
-        MATRIX grayed = RGBtoGray(&image);
-        MATRIX mirrored = mirror(grayed,&temp1);
-        write(width,height,mirrored,argv[2]);
-        // free(temp1);
+        // MATRIX q1 = createImage(height,width,maxColor);
+        // IMAGE *temp1 = *(q1);
 
+        IMAGE *temp2 = (IMAGE *)malloc(sizeof(IMAGE));
+        create(height,width,maxColor,temp2);
+        
+        
+        MATRIX mirrored = mirror(&image,&temp2);
+        MATRIX grayed = RGBtoGray(mirrored);
+        write(width,height,grayed,argv[2]);
 
     }
     else

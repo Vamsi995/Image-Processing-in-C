@@ -15,6 +15,8 @@ void write(int width, int height, MATRIX Pimage, char *filename)
 
     FILE *fp = fopen(filename,"wb");
 
+    int m = image->maxColor;
+
     int error = 1;
     if (fp != NULL)
     {
@@ -26,7 +28,12 @@ void write(int width, int height, MATRIX Pimage, char *filename)
         {
             for (int h = 0; h < width; h++)
             {
-                fprintf(fp, "%d %d %d ", (int)round(image->data[v][h].red), (int)round(image->data[v][h].green), (int)round(image->data[v][h].blue));
+
+                image->data[v][h].red = ((int)image->data[v][h].red > m) ? m : (int)image->data[v][h].red;
+                // image->data[v][h].green = (image->data[v][h].green > m) ? m : image->data[v][h].green;
+                // image->data[v][h].blue = (image->data[v][h].blue > m) ? m : image->data[v][h].blue;
+
+                fprintf(fp, "%d %d %d ", (int)(image->data[v][h].red), (int)(image->data[v][h].green), (int)(image->data[v][h].blue));
             }
             fprintf(fp, "\n");
         }

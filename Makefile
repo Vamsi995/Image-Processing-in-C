@@ -110,5 +110,14 @@ test3: | $(OUT)
 
 
 .PHONY: test
-test: test1 test2 | $(OUT)
+test: test1 test2 test3 | $(OUT)
 	echo "Finished all the tests"
+
+.PHONY: prepare
+prepare: 
+	echo "What is the root directory of your inputfile? Eg. ~/Server/htdocs"; \
+    read root_path; \
+	echo "What is the root directory of your outputfile? Eg. ~/Server/htdocs"; \
+	read root_path1; \
+    ./bin/Iprocess $$root_path $$root_path1 run
+	

@@ -9,10 +9,9 @@ int flatten(MATRIX p)
 
     IMAGE *P = *(p);
 
-    unsigned short r;
-    int m = P->maxColor;
+    float r;
+    float m = P->maxColor;
 
-    // printf("%d\n",P->height);
 
     for (int i = 0; i < P->height; i++)
     {
@@ -146,16 +145,7 @@ int matrixMul(MATRIX p, MATRIX x, MATRIX y) {
     IMAGE *A = *(x);
     IMAGE *B = *(y);
 
-
-    // if(A->height != B->height || A->width != B->width)
-    // {
-    //     return 1;
-    // }
-
-    int m = A->maxColor;
-
-    // printf("%d %d - %d %d\n",P->height,P->width, B->height,B->width);
-
+    float m = A->maxColor;
 
     for (int i = 0; i < A->height; ++i) {
       for (int j = 0; j < B->width; ++j) {
@@ -163,26 +153,12 @@ int matrixMul(MATRIX p, MATRIX x, MATRIX y) {
             P->data[i][j].red += A->data[i][k].red * B->data[k][j].red;
             P->data[i][j].green += A->data[i][k].green * B->data[k][j].green;
             P->data[i][j].blue += A->data[i][k].blue * B->data[k][j].blue;
-         }
+         }  
+         
+        //  P->data[i][j].red += A->data[i][k].red * B->data[k][j].red;
+      
       }
    }    
-
-
-        //   for(int i=0;i<P->height;i++)
-        //   {
-        //       for(int j=0;P->width;j++){
-
-        
-
-        //           P->data[i][j].red = (abs(P->data[i][j].red)>(float)m) ? (float)m : abs(P->data[i][j].red);
-        //           P->data[i][j].green = (abs(P->data[i][j].green)>(float)m) ? (float)m : abs(P->data[i][j].green);
-        //           P->data[i][j].blue = (abs(P->data[i][j].blue)>(float)m) ? (float)m : abs(P->data[i][j].blue);
-
-        //       }
-        //   }      
-
-
-
 
     return 0;
 
