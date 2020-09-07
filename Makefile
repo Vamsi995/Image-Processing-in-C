@@ -98,20 +98,17 @@ s_obj/IO.o:  src/transformation.c   include/IO.h include/types.h
 
 .PHONY: test1
 test1: | $(OUT)
-	./bin/Iprocess Images/input.ppm $(OUT)/$@.ppm run
+	./bin/Iprocess Images/input.ppm $(OUT)/input.ppm test
 
 .PHONY: test2
 test2: | $(OUT)
-	./bin/Iprocess Images/blocks.ppm $(OUT)/$@.ppm run
+	./bin/Iprocess Images/tinypix.ppm $(OUT)/tinypix.ppm test
 
 .PHONY: test3
-run: | $(OUT)
-	./bin/Iprocess Images/squares.ppm $(OUT)/$@.ppm run
+test3: | $(OUT)
+	./bin/Iprocess Images/sample.ppm $(OUT)/sample.ppm test
 
 
 .PHONY: test
-test: test1 test2 test3 | $(OUT)
-	# ./bin/Iprocess Images/input.ppm run
-	# ./bin/Iprocess Images/blocks.ppm run
-	# ./bin/Iprocess Images/squares.ppm run
+test: test1 test2 | $(OUT)
 	echo "Finished all the tests"

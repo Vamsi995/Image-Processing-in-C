@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "types.h"
 #include "matrix.h"
 
@@ -151,7 +152,7 @@ int matrixMul(MATRIX p, MATRIX x, MATRIX y) {
     //     return 1;
     // }
 
-
+    int m = A->maxColor;
 
     // printf("%d %d - %d %d\n",P->height,P->width, B->height,B->width);
 
@@ -164,7 +165,23 @@ int matrixMul(MATRIX p, MATRIX x, MATRIX y) {
             P->data[i][j].blue += A->data[i][k].blue * B->data[k][j].blue;
          }
       }
-   }
+   }    
+
+
+        //   for(int i=0;i<P->height;i++)
+        //   {
+        //       for(int j=0;P->width;j++){
+
+        
+
+        //           P->data[i][j].red = (abs(P->data[i][j].red)>(float)m) ? (float)m : abs(P->data[i][j].red);
+        //           P->data[i][j].green = (abs(P->data[i][j].green)>(float)m) ? (float)m : abs(P->data[i][j].green);
+        //           P->data[i][j].blue = (abs(P->data[i][j].blue)>(float)m) ? (float)m : abs(P->data[i][j].blue);
+
+        //       }
+        //   }      
+
+
 
 
     return 0;

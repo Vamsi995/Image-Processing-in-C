@@ -7,10 +7,13 @@
 
 
 
-void write(int width, int height, MATRIX Pimage, FILE *fp)
+void write(int width, int height, MATRIX Pimage, char *filename)
 {
 
     IMAGE *image = *(Pimage);
+
+
+    FILE *fp = fopen(filename,"wb");
 
     int error = 1;
     if (fp != NULL)
@@ -132,9 +135,7 @@ void readImage(IMAGE *image, FILE *file)
         }
     }
 
-
     fclose(file);
-
 
 }
 
