@@ -1,6 +1,9 @@
-#include "matrix.h"
 #include <math.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include "types.h"
+#include "transformation.h"
+#include "matrix.h"
 
 
 MATRIX createImage(int height, int width, int maxColor){
@@ -20,6 +23,11 @@ MATRIX createImage(int height, int width, int maxColor){
     return q;
 }
 
+
+
+
+
+
 MATRIX RGBtoGray(MATRIX Pimage){
 
     IMAGE *image = *(Pimage);
@@ -35,10 +43,9 @@ MATRIX RGBtoGray(MATRIX Pimage){
 
 	for(int i=0 ; i<h ; i = i+1){
 		for(int j=0; j<w ; j = j+1){
-				oneByThree->data[i][j].red = 2;
-				oneByThree->data[i][j].green = 2; 
-				oneByThree->data[i][j].blue = 2;
-                // printf("%hu",oneByThree->data[i][j].red);
+				oneByThree->data[i][j].red = 1/3.0;
+				oneByThree->data[i][j].green = 1/3.0; 
+				oneByThree->data[i][j].blue = 1/3.0;
 		}
 	}
     
@@ -53,18 +60,16 @@ MATRIX RGBtoGray(MATRIX Pimage){
 
 }
 
-MATRIX mirror(MATRIX Pimage){
+MATRIX mirror(MATRIX Pimage, MATRIX Presult){
 
     IMAGE *image = *(Pimage);
+    IMAGE *result = *(Presult);
+
 	int h = image->height;
 	int w = image->width;
     int m = image->maxColor;
 
     int k = h;
-
-    // MATRIX q1 = createImage(h,w,m);
-    // IMAGE *tempo = *(q1);
-
 
     MATRIX q = createImage(h,h,m);
     IMAGE *temp = *(q);
@@ -86,12 +91,15 @@ MATRIX mirror(MATRIX Pimage){
 		}
 	}
 
+ 
 
-	int success = matrixMul(&image, &temp, &image); //expecting this function to already exist
+	int success = matrixMul(&result, &temp, &image); //expecting this function to already exist
+    
+    free(temp);
 
     if(success == 0)
     {
-	    return Pimage;
+	    return Presult;
     }
 }
 

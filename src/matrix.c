@@ -1,5 +1,6 @@
-#include "matrix.h"
 #include <stdio.h>
+#include "types.h"
+#include "matrix.h"
 
 
 int flatten(MATRIX p)
@@ -25,9 +26,9 @@ int flatten(MATRIX p)
             
             r = (r>m)?m:r;
 
-            P->data[i][j].red = r/3;
-            P->data[i][j].green = r/3;
-            P->data[i][j].blue = r/3;
+            P->data[i][j].red = r;
+            P->data[i][j].green = r;
+            P->data[i][j].blue = r;
         }
     }
 
@@ -153,11 +154,8 @@ int matrixMul(MATRIX p, MATRIX x, MATRIX y) {
     // }
 
 
-    P->height = A->height;
-    P->width = B->width;
-    P->maxColor = B->maxColor;
 
-    printf("%d %d - %d %d\n",A->height,A->width, B->height,B->width);
+    printf("%d %d - %d %d\n",P->height,P->width, B->height,B->width);
 
 
     for (int i = 0; i < A->height; ++i) {

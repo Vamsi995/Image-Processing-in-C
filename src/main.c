@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "types.h"
 #include "matrix.h"
 #include "transformation.h"
 
@@ -22,7 +23,7 @@ void write(int width, int height, MATRIX Pimage)
         {
             for (int h = 0; h < width; h++)
             {
-                fprintf(fp, "%hu %hu %hu ", image->data[v][h].red, image->data[v][h].green, image->data[v][h].blue);
+                fprintf(fp, "%d %d %d ", (int)image->data[v][h].red, (int)image->data[v][h].green, (int)image->data[v][h].blue);
             }
             fprintf(fp, "\n");
         }
@@ -78,7 +79,7 @@ int main(int argc, char *argv[])
 
             sscanf(space, "%d %d %d", &width, &height, &maxColor);
 
-            if (maxColor == 0 || abs(maxColor) > 63575)
+            if (maxColor == 0 || abs(maxColor) > 255)
             {
                 flag = 1;
                 continue;
@@ -107,16 +108,17 @@ int main(int argc, char *argv[])
     image->maxColor = maxColor;
     image->data = (PIXEL **)malloc(height * sizeof(PIXEL *));
 
-    unsigned short red;
-    unsigned short green;
-    unsigned short blue;
+  
+     float red;
+    float green;
+    float blue;
 
     for (int i = 0; i < height; i++)
     {
         image->data[i] = (PIXEL *)malloc(width * sizeof(PIXEL));
         for (int j = 0; j < width; j++) // Important bug fix here!
         {
-            fscanf(file, "%hu %hu %hu", &red, &green, &blue);
+            fscanf(file, "%f %f %f", &red, &green, &blue);
             image->data[i][j].red = red;
             image->data[i][j].green = green;
             image->data[i][j].blue = blue;
@@ -125,30 +127,41 @@ int main(int argc, char *argv[])
 
     fclose(file);
 
-    // printf("%p\n", image);
-    // write(width,height,&temp);    
-    MATRIX grayed = mirror(&image);
-    // MATRIX mirrored = mirror(&image);
-    // MATRIX edge = mirror(&image);
 
-    // unsigned short result;
+    if(strcmp(argv[2],"T1") == 0)
+    {
 
-    //  for (int i = 0; i < height; i++)
-    // {
+        MATRIX grayed = RGBtoGray(&image);
+        write(width,height,grayed);
 
-    //     for (int j = 0; j < width; j++)
-    //     {
+    }
+    else if(strcmp(argv[2],"T2") == 0)
+    {
+
+        MATRIX q1 = createImage(height,width,maxColor);
+        IMAGE *temp1 = *(q1);
+
+        MATRIX mirrored = mirror(&image,&temp1);
+        write(width,height,mirrored);
+        
 
 
-    //         result = image->data[i][j].red + image->data[i][j].green + image->data[i][j].blue; 
-            
-    //         image->data[i][j].red = result;
-    //         image->data[i][j].green = result;
-    //         image->data[i][j].blue = result;
-    //     }
-    // }
+    }
+    else if(strcmp(argv[2],"run") == 0)
+    {
 
-    write(width,height,grayed);
+        MATRIX q1 = createImage(height,width,maxColor);
+        IMAGE *temp1 = *(q1);
+        
+        MATRIX grayed = RGBtoGray(&image);
+        MATRIX mirrored = mirror(grayed,&temp1);
+        write(width,height,mirrored);
 
+    }
+    else
+    {
+        printf("Error message");
+    }
+ 
 
 }
