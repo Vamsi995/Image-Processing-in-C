@@ -1,6 +1,9 @@
 LIBDIR := lib
 OBJDIR := obj
 EXEDIR := bin
+LIBSO  := lib.so
+SOBJ   := s_obj
+
 
 EXE := $(EXEDIR)/Iprocess
 LIBS := $(addprefix $(LIBDIR)/,libmatrixmath.a libtransformation.a libIO.a)
@@ -46,6 +49,12 @@ $(LIBDIR):
 $(EXEDIR):
 	mkdir -p $(EXEDIR)
 
+$(LIBSO):
+	mkdir -p $(LIBSO) 
+
+$(SOBJ):
+	mkdir -p $(SOBJ)
+
 
 .PHONY: run
 run:
@@ -64,3 +73,19 @@ T2:
 .PHONY: clean
 clean:
 	rm -rf $(EXEDIR) $(OBJDIR) $(LIBDIR)
+	rm -rf $(LIBSO) $(SOBJ)
+
+
+
+.PHONY: libso
+libso: s_obj/matrix.o s_obj/transformation.o |$(LIBSO)
+	gcc -shared -o lib.so/libmatrixmath.so      s_obj/matrix.o 
+	gcc -shared -o lib.so/libtransformation.so  s_obj/transformation.o
+
+s_obj/matrix.o:  src/matrix.c   include/matrix.h include/transformation.h include/types.h  |$(SOBJ)
+	gcc -fPIC -c -I ./include/ src/matrix.c -o s_obj/matrix.o
+
+s_obj/transformation.o:  src/transformation.c     include/matrix.h  include/transformation.h include/types.h    
+	gcc -fPIC -c -I ./include/ src/transformation.c -o s_obj/transformation.o
+
+
