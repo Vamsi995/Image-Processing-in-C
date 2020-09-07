@@ -8,8 +8,6 @@ int flatten(MATRIX p)
 
     IMAGE *P = *(p);
 
-    printf("%p\n",P);
-
     unsigned short r;
     int m = P->maxColor;
 

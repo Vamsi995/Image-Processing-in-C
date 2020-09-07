@@ -3,6 +3,7 @@ OBJDIR := obj
 EXEDIR := bin
 LIBSO  := lib.so
 SOBJ   := s_obj
+OUT    := out
 
 
 EXE := $(EXEDIR)/Iprocess
@@ -20,8 +21,8 @@ all: build run
 	@echo "Finished Successfully"
 
 .PHONY: build	
-build: obj/main.o libso | $(EXEDIR)
-	gcc -o $(EXE) -I include $< -L lib.so -lmatrixmath -ltransformation -lIO -lm
+build: obj/main.o liba | $(EXEDIR)
+	gcc -o $(EXE) -I include $< -L lib -lmatrixmath -ltransformation -lIO -lm
 
 $(OBJDIR)/%.o: src/%.c matrix.h transformation.h | $(OBJDIR)
 	gcc -o $@ -c -I include $<
@@ -55,24 +56,27 @@ $(LIBSO):
 $(SOBJ):
 	mkdir -p $(SOBJ)
 
+$(OUT):
+	mkdir -p $(OUT)
+
 
 .PHONY: run
-run:
-	./bin/Iprocess Images/input.ppm run
+run: | $(OUT)
+	./bin/Iprocess Images/input.ppm $(OUT)/output.ppm run
 
 .PHONY: T1
-T1:
-	./bin/Iprocess Images/input.ppm T1
+T1: | $(OUT)
+	./bin/Iprocess Images/input.ppm $(OUT)/T1.ppm T1
 
 
 .PHONY: T2
-T2:
-	./bin/Iprocess Images/input.ppm T2
+T2: | $(OUT)
+	./bin/Iprocess Images/input.ppm $(OUT)/T2.ppm T2
 
 
 .PHONY: clean
 clean:
-	rm -rf $(EXEDIR) $(OBJDIR) $(LIBDIR)
+	rm -rf $(EXEDIR) $(OBJDIR) $(LIBDIR) $(OUT)
 	rm -rf $(LIBSO) $(SOBJ)
 
 
@@ -93,21 +97,21 @@ s_obj/IO.o:  src/transformation.c   include/IO.h include/types.h
 	gcc -fPIC -c -I ./include/ src/IO.c -o s_obj/IO.o
 
 .PHONY: test1
-test1:
-	./bin/Iprocess Images/input.ppm run
+test1: | $(OUT)
+	./bin/Iprocess Images/input.ppm $(OUT)/$@.ppm run
 
 .PHONY: test2
-test2:
-	./bin/Iprocess Images/blocks.ppm run
+test2: | $(OUT)
+	./bin/Iprocess Images/blocks.ppm $(OUT)/$@.ppm run
 
 .PHONY: test3
-run:
-	./bin/Iprocess Images/squares.ppm run
+run: | $(OUT)
+	./bin/Iprocess Images/squares.ppm $(OUT)/$@.ppm run
 
 
 .PHONY: test
-test:
-	./bin/Iprocess Images/input.ppm run
-	./bin/Iprocess Images/blocks.ppm run
-	./bin/Iprocess Images/squares.ppm run
-
+test: test1 test2 test3 | $(OUT)
+	# ./bin/Iprocess Images/input.ppm run
+	# ./bin/Iprocess Images/blocks.ppm run
+	# ./bin/Iprocess Images/squares.ppm run
+	echo "Finished all the tests"

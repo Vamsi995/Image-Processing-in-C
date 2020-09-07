@@ -12,6 +12,7 @@ int main(int argc, char *argv[])
 
     // Reading the picture file as input
     FILE *file = fopen(argv[1], "r");
+
     if(file == NULL)
     {
         print_exit("File not found\n Please keep your input.ppm file in Images/input.ppm");
@@ -32,26 +33,27 @@ int main(int argc, char *argv[])
     int width = image->width;
     int maxColor = image->maxColor;
 
-
+    FILE *outFile = fopen(argv[2], "wb");
     //Makefile target runs
-    if(strcmp(argv[2],"T1") == 0)
+    if(strcmp(argv[3],"T1") == 0)
     {
 
         MATRIX grayed = RGBtoGray(&image);
-        write(width,height,grayed);
+        write(width,height,grayed,outFile);
 
     }
-    else if(strcmp(argv[2],"T2") == 0)
+    else if(strcmp(argv[3],"T2") == 0)
     {
 
         MATRIX q1 = createImage(height,width,maxColor);
         IMAGE *temp1 = *(q1);
 
         MATRIX mirrored = mirror(&image,&temp1);
-        write(width,height,mirrored);
-
+        write(width,height,mirrored,outFile);
+        free(temp1);
+        free(image);
     }
-    else if(strcmp(argv[2],"run") == 0)
+    else if(strcmp(argv[3],"run") == 0)
     {
 
         MATRIX q1 = createImage(height,width,maxColor);
@@ -59,7 +61,9 @@ int main(int argc, char *argv[])
         
         MATRIX grayed = RGBtoGray(&image);
         MATRIX mirrored = mirror(grayed,&temp1);
-        write(width,height,mirrored);
+        write(width,height,mirrored,outFile);
+        free(temp1);
+        free(image);
 
     }
     else

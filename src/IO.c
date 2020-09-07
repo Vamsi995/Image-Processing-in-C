@@ -7,11 +7,10 @@
 
 
 
-void write(int width, int height, MATRIX Pimage)
+void write(int width, int height, MATRIX Pimage, FILE *fp)
 {
 
     IMAGE *image = *(Pimage);
-    FILE *fp = fopen("level.ppm", "wb");
 
     int error = 1;
     if (fp != NULL)
