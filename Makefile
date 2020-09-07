@@ -20,8 +20,8 @@ all: build run
 	@echo "Finished Successfully"
 
 .PHONY: build	
-build: obj/main.o libso | $(EXEDIR)
-	gcc -o $(EXE) -I include $< -L lib.so -lmatrixmath -ltransformation -lIO -lm
+build: obj/main.o liba | $(EXEDIR)
+	gcc -o $(EXE) -I include $< -L lib -lmatrixmath -ltransformation -lIO -lm
 
 $(OBJDIR)/%.o: src/%.c matrix.h transformation.h | $(OBJDIR)
 	gcc -o $@ -c -I include $<
