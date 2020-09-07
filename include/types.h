@@ -2,9 +2,6 @@
 typedef struct rgb
 {
 
-    // unsigned short red;
-    // unsigned short green;
-    // unsigned short blue;
     float red;
     float green;
     float blue;

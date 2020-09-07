@@ -155,7 +155,7 @@ int matrixMul(MATRIX p, MATRIX x, MATRIX y) {
 
 
 
-    printf("%d %d - %d %d\n",P->height,P->width, B->height,B->width);
+    // printf("%d %d - %d %d\n",P->height,P->width, B->height,B->width);
 
 
     for (int i = 0; i < A->height; ++i) {
