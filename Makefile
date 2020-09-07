@@ -82,10 +82,10 @@ libso: s_obj/matrix.o s_obj/transformation.o |$(LIBSO)
 	gcc -shared -o lib.so/libmatrixmath.so      s_obj/matrix.o 
 	gcc -shared -o lib.so/libtransformation.so  s_obj/transformation.o
 
-s_obj/matrix.o:  src/matrix.c   include/matrix.h include/transformation.h include/types.h  |$(SOBJ)
+s_obj/matrix.o:  src/matrix.c   include/IO.h include/matrix.h include/transformation.h include/types.h  |$(SOBJ)
 	gcc -fPIC -c -I ./include/ src/matrix.c -o s_obj/matrix.o
 
-s_obj/transformation.o:  src/transformation.c     include/matrix.h  include/transformation.h include/types.h    
+s_obj/transformation.o:  src/transformation.c   include/IO.h  include/matrix.h  include/transformation.h include/types.h    
 	gcc -fPIC -c -I ./include/ src/transformation.c -o s_obj/transformation.o
 
 
