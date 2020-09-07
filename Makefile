@@ -20,8 +20,8 @@ all: build run
 	@echo "Finished Successfully"
 
 .PHONY: build	
-build: obj/main.o liba | $(EXEDIR)
-	gcc -o $(EXE) -I include $< -L lib -lmatrixmath -ltransformation -lIO -lm
+build: obj/main.o libso | $(EXEDIR)
+	gcc -o $(EXE) -I include $< -L lib.so -lmatrixmath -ltransformation -lIO -lm
 
 $(OBJDIR)/%.o: src/%.c matrix.h transformation.h | $(OBJDIR)
 	gcc -o $@ -c -I include $<
@@ -78,14 +78,17 @@ clean:
 
 
 .PHONY: libso
-libso: s_obj/matrix.o s_obj/transformation.o |$(LIBSO)
+libso: s_obj/matrix.o s_obj/transformation.o s_obj/IO.o |$(LIBSO)
 	gcc -shared -o lib.so/libmatrixmath.so      s_obj/matrix.o 
-	gcc -shared -o lib.so/libtransformation.so  s_obj/transformation.o
+	gcc -shared -o lib.so/libtransformation.so  s_obj/transformation.o s_obj/matrix.o
+	gcc -shared -o lib.so/libIO.so  s_obj/IO.o
 
-s_obj/matrix.o:  src/matrix.c   include/IO.h include/matrix.h include/transformation.h include/types.h  |$(SOBJ)
+s_obj/matrix.o:  src/matrix.c   include/IO.h include/matrix.h include/transformation.h |$(SOBJ)
 	gcc -fPIC -c -I ./include/ src/matrix.c -o s_obj/matrix.o
 
-s_obj/transformation.o:  src/transformation.c   include/IO.h  include/matrix.h  include/transformation.h include/types.h    
+s_obj/transformation.o:  src/transformation.c include/IO.h  include/matrix.h  include/transformation.h    
 	gcc -fPIC -c -I ./include/ src/transformation.c -o s_obj/transformation.o
 
+s_obj/IO.o:  src/transformation.c   include/IO.h include/types.h     
+	gcc -fPIC -c -I ./include/ src/IO.c -o s_obj/IO.o
 
