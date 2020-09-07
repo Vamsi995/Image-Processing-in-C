@@ -102,12 +102,12 @@ test2:
 
 .PHONY: test3
 run:
-	./bin/Iprocess Images/squares.ppm run
+	./bin/Iprocess Images/sample.ppm run
 
 
 .PHONY: test
 test:
 	./bin/Iprocess Images/input.ppm run
 	./bin/Iprocess Images/blocks.ppm run
-	./bin/Iprocess Images/squares.ppm run
+	./bin/Iprocess Images/sample.ppm run
 
