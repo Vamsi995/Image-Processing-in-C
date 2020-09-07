@@ -3,7 +3,7 @@ OBJDIR := obj
 EXEDIR := bin
 
 EXE := $(EXEDIR)/Iprocess
-LIBS := $(addprefix $(LIBDIR)/,libmatrixmath.a libtransformation.a)
+LIBS := $(addprefix $(LIBDIR)/,libmatrixmath.a libtransformation.a libIO.a)
 SRCS := $(wildcard src/*.c)
 HEADERS := $(wildcard include/*.h)
 OBJS := $(addprefix $(OBJDIR)/,$(patsubst src/%.c,%.o,$(SRCS)))
@@ -13,12 +13,12 @@ vpath %.h include
 
 
 
-# all: $(EXE)
-# 	@echo "Finished Successfully"
+all: build run
+	@echo "Finished Successfully"
 
 .PHONY: build	
 build: obj/main.o liba | $(EXEDIR)
-	gcc -o $(EXE) -I include $< -L lib -lmatrixmath -ltransformation -lm
+	gcc -o $(EXE) -I include $< -L lib -lmatrixmath -ltransformation -lIO -lm
 
 $(OBJDIR)/%.o: src/%.c matrix.h transformation.h | $(OBJDIR)
 	gcc -o $@ -c -I include $<
@@ -30,9 +30,10 @@ $(OBJDIR)/%.o: src/%.c matrix.h transformation.h | $(OBJDIR)
 # 	ar rcs $@ $^
 
 .PHONY: liba
-liba: obj/matrix.o obj/transformation.o include/matrix.h include/transformation.h | $(LIBDIR)
+liba: obj/matrix.o obj/transformation.o obj/IO.o include/matrix.h include/transformation.h | $(LIBDIR)
 	ar rcs $(LIBDIR)/libmatrixmath.a obj/matrix.o include/matrix.h include/transformation.h
 	ar rcs $(LIBDIR)/libtransformation.a $^
+	ar rcs $(LIBDIR)/libIO.a obj/IO.o include/IO.h
 
 
 
