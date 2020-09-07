@@ -85,7 +85,26 @@ libso: s_obj/matrix.o s_obj/transformation.o |$(LIBSO)
 s_obj/matrix.o:  src/matrix.c   include/IO.h include/matrix.h include/transformation.h include/types.h  |$(SOBJ)
 	gcc -fPIC -c -I ./include/ src/matrix.c -o s_obj/matrix.o
 
-s_obj/transformation.o:  src/transformation.c   include/IO.h  include/matrix.h  include/transformation.h include/types.h    
+s_obj/transformation.o:  src/transformation.c include/IO.h include/matrix.h  include/transformation.h include/types.h    
 	gcc -fPIC -c -I ./include/ src/transformation.c -o s_obj/transformation.o
 
+
+.PHONY: test1
+test1:
+	./bin/Iprocess Images/input.ppm run
+
+.PHONY: test2
+test2:
+	./bin/Iprocess Images/blocks.ppm run
+
+.PHONY: test3
+run:
+	./bin/Iprocess Images/squares.ppm run
+
+
+.PHONY: test
+test:
+	./bin/Iprocess Images/input.ppm run
+	./bin/Iprocess Images/blocks.ppm run
+	./bin/Iprocess Images/squares.ppm run
 
