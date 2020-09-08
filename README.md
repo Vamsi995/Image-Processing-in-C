@@ -5,26 +5,33 @@ Filters available: Edge Detection, Grayscale, Image Mirroring
 
 ## Getting Started
 
+- File Structure
+```
+
+```
+
 
 ### Prerequisites
 
+* **GNU Compiler Collection (GCC)**
+
 ```
-Give examples
+ $ sudo apt update
+ $ sudo apt install build-essential
+ $ sudo apt-get install manpages-dev
+ $ gcc --version
 ```
 
 ### Installation & Compilation
 
+- Clone the repo
 ```
-Give the example
+$ git clone <repolink>
 ```
-
-And repeat
-
+- Build & Compile
 ```
-until finished
+$ make build
 ```
-
-End with an example of getting some data out of the system or using it for a little demo
 
 ## Running the tests
 
